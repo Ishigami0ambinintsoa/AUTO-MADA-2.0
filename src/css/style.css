@@ -1,0 +1,229 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+    color: white;
+    min-height: 100vh;
+}
+
+/* HEADER */
+header {
+    width: 100%;
+    background: #29b6f6;;
+}
+
+.navBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    flex-wrap: wrap;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo img {
+    height: 50px;
+    border-radius: 10px;
+}
+
+.navLinks ul {
+    display: flex;
+    gap: 20px;
+}
+
+.navLinks ul li a {
+    color: white;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.navLinks ul li a:hover {
+    color: #4fc3f7;
+}
+
+.menu_Hamburger {
+    display: none;
+    width: 30px;
+    cursor: pointer;
+}
+
+/* LANGUES */
+.langues {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+}
+
+.langues button {
+    background-color: #4fc3f7;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    padding: 8px 12px;
+    margin-right: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.langues button:hover {
+    background-color: #29b6f6;
+}
+
+/* TITRES */
+h1, h2 {
+    text-align: center;
+    margin: 20px 0;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin-top: 40px;
+}
+
+/* SECTIONS */
+section {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+section ul {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+section ul li a {
+    display: block;
+    background: rgba(255,255,255,0.1);
+    padding: 12px 20px;
+    border-radius: 10px;
+    color: white;
+    transition: 0.3s;
+    text-align: center;
+}
+
+section ul li a:hover {
+    background-color: #4fc3f7;
+    color: #0f2027;
+}
+
+
+/* quiz */
+#quiz-form label{
+    margin: 10px 0;
+    display: flex;
+
+}
+#quiz-form button{
+    background-color:#0f2027;
+    color: white;
+    padding: 5px;
+    
+}
+
+
+/* RESPONSIVE */
+@media screen and (max-width: 900px) {
+    .navLinks {
+        flex-direction: column;
+        width: 100%;
+        margin-left: -100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        background: rgba(0,0,0,0.9);
+        justify-content: center;
+        align-items: center;
+        transition: all 0.5s;
+    }
+
+    .navLinks.mobile-menu {
+        margin-left: 0;
+    }
+
+    .navLinks ul {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .menu_Hamburger {
+        display: block;
+    }
+}
+
+
+/* -------------------- */
+ main {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), #242323ba), url("../assets/image/fond-accueil.jpg");
+    background-position: center;
+    background-size: cover;
+}
+
+#home {
+    height: calc(100vh - 50px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    width: 80%;
+    margin-inline: auto;
+    text-align: center;
+}
+
+#home h2 {
+    font-size: 60px;
+    margin-bottom: 30px;
+    font-weight: 700;
+    -webkit-text-stroke: #22b3c1 2px;
+    color: transparent;
+}
+
+#home p {
+    color: white;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: 100 !important;
+}
+
+.home-btn {
+    margin-top: 50px;
+    padding-inline: 100px;
+}
+
+.btn-visite {
+    background-color: #22b3c1;
+    font-size: 18px;
+    border: 10px solid #22b3c1;
+    transition: 0.5s;
+    font-weight: bolder;
+    border-radius: 10px;
+    color: #fff;
+}
+
+
+
+.btn-visite:hover {
+    background-color:#22b3c1;
+    color: #fff;
+}

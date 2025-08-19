@@ -1,0 +1,105 @@
+*{
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    list-style: none;
+}
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+header{
+    height: 100vh;
+    width: 100vw;
+    background-image: url(../../../src/assets/image/accueil_PC.jpg);
+    background-size: cover;
+
+}
+
+
+.navBar{
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #333;
+}
+
+.navBar .navLinks ul{
+    display: flex;    
+}
+.navBar .navLinks ul li{
+    margin: 0 25px;
+}
+.navBar .navLinks ul li a{
+    color: white;
+}
+
+.logo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo img{
+width: 100px;
+padding-left: 20px;
+border-radius: 100%;
+}
+
+.active a{
+    color: red;
+     ;
+}
+
+
+.menu_Hamburger{
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    width: 30px;
+}
+
+@media screen and (max-width:850px) {
+    .navLinks{
+        top: 0;
+        left: 0;
+        position: absolute;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: -100%;
+        transition: all 0.5s;
+        background-color: #333;
+    }
+
+    .logo img{
+        width: 70px;
+        padding-left: 20px;
+        border-radius: 100%;
+    }
+
+    .mobile-menu{
+        margin-left: 0;
+    }
+    .navBar .navLinks ul li{
+    font-size: 1.2em;
+    width: 100%;
+    margin: 25px 0;
+    }
+    .navLinks ul{
+        display: flex;
+        align-items:center ;
+        flex-direction: column;
+    }
+    .menu_Hamburger{
+        display: block;
+        top: 20px;
+    }
+}

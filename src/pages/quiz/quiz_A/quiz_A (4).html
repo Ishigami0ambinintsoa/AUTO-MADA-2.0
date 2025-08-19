@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz - AUTO-MADA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="navBar">
+      <div class="logo">
+        <img class="imgLogo" src="../../../images/fond/logo 560 490.png" alt="">
+        <span>AUTO-MADA</span>
+      </div>
+
+      <nav class="navLinks">
+        <ul>
+          <li><a href="../../../index.html">Accueil</a></li>
+          <li><a href="../../../index.html">Leçons</a></li>
+          <li><a href="../../../index.html">Quiz</a></li>
+          <li><a href="../../../index.html">Simulateur</a></li>
+          <li><a href="../../../index.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <img src="../../../images/fond/menu.png" alt="Menu" class="menu_Hamburger" onclick="toggleMenu()">
+    </div>
+  </header>
+
+  <!-- CONTENU QUIZ -->
+  <main>
+    <section class="quiz-section">
+      <h2>🧠 Quiz Code de la Route</h2>
+
+      <div class="quiz-card">
+        <img id="question-image" src="" alt="Image question" class="quiz-img">
+        <p id="question-text" class="quiz-question">Chargement...</p>
+
+        <form id="quiz-form">
+          <label><input type="radio" name="answer" value="A"> <span id="labelA"></span></label><br>
+          <label><input type="radio" name="answer" value="B"> <span id="labelB"></span></label><br>
+          <label><input type="radio" name="answer" value="C"> <span id="labelC"></span></label><br>
+          <button type="button" class="btn" onclick="checkAnswer()">Valider</button>
+        </form>
+
+        <p id="feedback"></p>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2025 AUTO-MADA. Tous droits réservés.</p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.querySelector(".navLinks").classList.toggle("mobile-menu");
+    }
+  </script>
+  <script src="quiz.js"></script>
+</body>
+</html>

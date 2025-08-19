@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simulateur de démarrage – Camion</title>
+  <style>
+    :root{
+      --bg:#0f172a;            /* ardoise-900 */
+      --panel:#111827;         /* gris-900   */
+      --muted:#94a3b8;         /* ardoise-400*/
+      --text:#e5e7eb;          /* gris-200   */
+      --accent:#22b3c1;        /* turquoise  */
+      --ok:#10b981;            /* vert */
+      --warn:#f59e0b;          /* orange */
+      --bad:#ef4444;           /* rouge */
+      --card:#0b1225;          /* bleu sombre */
+      --shadow: 0 10px 25px rgba(0,0,0,.35);
+      --radius: 16px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Inter,Arial;
+      color:var(--text);
+      background: radial-gradient(1200px 600px at 70% -10%, #123 0%, transparent 60%),
+                  radial-gradient(900px 500px at -20% 20%, #0a2233 0%, transparent 60%),
+                  linear-gradient(160deg, #0a1022 0%, #08111d 100%);
+      display:flex; align-items:center; justify-content:center; padding:16px;
+    }
+    .app{
+      width:100%; max-width:1200px;
+      display:grid; gap:16px;
+      grid-template-columns: 1.2fr 1fr; 
+    }
+    @media (max-width: 960px){
+      .app{ grid-template-columns: 1fr; }
+    }
+
+    .card{ background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.0));
+           border:1px solid rgba(255,255,255,.06);
+           border-radius: var(--radius);
+           box-shadow: var(--shadow);
+           padding:16px; }
+
+    h1{font-weight:800; letter-spacing:.3px; margin:0 0 8px;}
+    .sub{color:var(--muted); font-size:.95rem; margin-bottom:8px}
+
+    .cluster{display:flex; gap:12px; flex-wrap:wrap; align-items:center}
+    .grow{flex:1}
+
+    /* LEFT: CONTROLS */
+    .controls{display:grid; gap:16px}
+
+    .grid-2{display:grid; grid-template-columns: 1fr 1fr; gap:12px}
+
+    .btn, .toggle{cursor:pointer; user-select:none}
+    .btn{
+      border-radius:12px; padding:10px 14px; border:1px solid rgba(255,255,255,.08);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.05);
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      font-weight:600; transition:transform .06s ease, background .2s;
+    }
+    .btn:active{transform:translateY(1px)}
+
+    .btn.primary{ background: linear-gradient(180deg, #1a3e46, #112a30); border-color:#1b5864 }
+    .btn.red{ background: linear-gradient(180deg, #4b1b1b, #2e1212); border-color:#6b1e1e }
+
+    .row{display:flex; align-items:center; gap:10px; justify-content:space-between}
+
+    .slider{ width:100% }
+    input[type=range]{ width:100% }
+
+    .switch{ position:relative; width:48px; height:28px; background:#1b233a; border:1px solid rgba(255,255,255,.08);
+             border-radius:999px; display:inline-block; vertical-align:middle }
+    .knob{ position:absolute; top:2px; left:2px; width:24px; height:24px; background:#eee;
+           border-radius:50%; transition:left .2s ease }
+    .switch.on .knob{ left:22px; background:#c7fff6 }
+
+    .key{ display:flex; gap:8px; flex-wrap:wrap }
+    .key .pos{ padding:8px 10px; border-radius:10px; border:1px solid rgba(255,255,255,.08);
+               background:rgba(255,255,255,.04); min-width:72px; text-align:center }
+    .key .pos.active{ outline:2px solid var(--accent); }
+
+    /* RIGHT: DASHBOARD */
+    .dash{ display:grid; gap:16px }
+    .indicators{ display:grid; grid-template-columns: repeat(3, 1fr); gap:10px }
+    .ind{ border-radius:12px; padding:10px; background:linear-gradient(180deg, #0d152b, #091022);
+          border:1px solid rgba(255,255,255,.06); text-align:center; }
+    .ind .label{ font-size:.85rem; color:var(--muted) }
+    .lamp{ font-weight:800; padding:2px 8px; border-radius:999px; display:inline-block; margin-top:4px }
+    .on{ background: var(--ok); color:#03110b }
+    .warn{ background: var(--warn); color:#1b1200 }
+    .bad{ background: var(--bad); color:#2a0707 }
+    .off{ background:#1f2937; color:#9ca3af }
+
+    .gauge{ padding:14px; background:linear-gradient(180deg, #0d1427, #0a1020); border:1px solid rgba(255,255,255,.06); border-radius:12px }
+    .bar{ height:12px; background:#0b1a2c; border:1px solid rgba(255,255,255,.08); border-radius:999px; overflow:hidden }
+    .fill{ height:100%; width:0%; background:linear-gradient(90deg, #2dd4bf, #22b3c1); transition:width .12s linear }
+
+    .state{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; 
+            font-weight:700; letter-spacing:.5px; }
+
+    .help{ font-size:.9rem; color:var(--muted) }
+    .footer{ text-align:center; opacity:.7; font-size:.85rem }
+    .kbd{ font-family: ui-monospace, Consolas, monospace; background:#111826; border:1px solid rgba(255,255,255,.08); padding:2px 6px; border-radius:6px }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <!-- LEFT: CONTROLS -->
+    <section class="controls card">
+      <h1>Simulateur de démarrage – Camion</h1>
+      <p class="sub">Suivez la bonne procédure (diesel). Essayez aussi de caler si vous partez en 1ère sans embrayer 😉</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Transmission & freins</h3>
+          <div class="cluster">
+            <button id="btnN" class="btn">Point mort (N)</button>
+            <button id="btnG1" class="btn">Vitesse 1</button>
+            <button id="btnG2" class="btn">Vitesse 2</button>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <span>Frein de parking</span>
+            <div id="park" class="switch on toggle" role="switch" aria-checked="true"><div class="knob"></div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Pédales</h3>
+          <div class="row">
+            <label class="grow">Embrayage (<span id="clutchVal">0</span>%)</label>
+            <input id="clutch" type="range" min="0" max="100" value="0" class="slider" />
+          </div>
+          <div class="row">
+            <label class="grow">Accélérateur (<span id="throttleVal">0</span>%)</label>
+            <input id="throttle" type="range" min="0" max="100" value="0" class="slider" />
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Contact (clé)</h3>
+          <div class="key">
+            <div data-pos="OFF"   class="pos active">OFF</div>
+            <div data-pos="ACC"   class="pos">ACC</div>
+            <div data-pos="ON"    class="pos">ON</div>
+            <div data-pos="START" class="pos">START</div>
+          </div>
+          <p class="help">Conseil : en dessous de 5 °C, attendez l'extinction du témoin <span class="kbd">Préchauffage</span> avant START.</p>
+        </div>
+
+        <div class="card">
+          <h3>Conditions</h3>
+          <div class="row">
+            <label class="grow">Température extérieure (<span id="tempOutVal">20</span> °C)</label>
+            <input id="tempOut" type="range" min="-20" max="40" value="20" class="slider" />
+          </div>
+          <div class="row">
+            <label class="grow">Niveau de carburant (<span id="fuelVal">80</span>%)</label>
+            <input id="fuel" type="range" min="0" max="100" value="80" class="slider" />
+          </div>
+          <div class="row">
+            <label class="grow">Batterie (<span id="batVal">100</span>%)</label>
+            <input id="battery" type="range" min="0" max="100" value="100" class="slider" />
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">Raccourcis : <span class="kbd">C</span> embrayage 100%, <span class="kbd">X</span> relâcher, <span class="kbd">N</span>/<span class="kbd">1</span>/<span class="kbd">2</span> vitesses, <span class="kbd">P</span> frein parking, <span class="kbd">S</span> START, <span class="kbd">O</span> ON, <span class="kbd">F</span> OFF.</div>
+    </section>
+
+    <!-- RIGHT: DASHBOARD / FEEDBACK -->
+    <section class="dash">
+      <div class="card">
+        <h3>État moteur</h3>
+        <div class="row"><span>État :</span> <span id="engineState" class="state">OFF</span></div>
+        <div class="row"><span>RPM :</span> <span id="rpm">0</span></div>
+        <div class="bar" style="margin-top:6px"><div id="rpmBar" class="fill"></div></div>
+      </div>
+
+      <div class="card indicators">
+        <div class="ind"><div class="label">Batterie</div><div id="lampBatt" class="lamp off">OFF</div></div>
+        <div class="ind"><div class="label">Huile</div><div id="lampOil" class="lamp off">OFF</div></div>
+        <div class="ind"><div class="label">Préchauffage</div><div id="lampGlow" class="lamp off">OFF</div></div>
+        <div class="ind"><div class="label">Point mort (N)</div><div id="lampN" class="lamp off">OFF</div></div>
+        <div class="ind"><div class="label">Frein parking</div><div id="lampPark" class="lamp off">OFF</div></div>
+        <div class="ind"><div class="label">Alerte</div><div id="lampWarn" class="lamp off">OK</div></div>
+      </div>
+
+      <div class="card">
+        <h3>Journal / Conseils</h3>
+        <div id="log" class="help" style="max-height:180px; overflow:auto"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ======= STATE =======
+    const state = {
+      key: 'OFF',               // OFF, ACC, ON, START
+      engine: 'OFF',            // OFF, PREHEAT, CRANKING, RUNNING, STALLED
+      rpm: 0,
+      gear: 'N',                // N, 1, 2 (simple)
+      park: true,
+      clutch: 0,                // 0..100
+      throttle: 0,              // 0..100
+      tempOut: 20,              // °C
+      fuel: 80,                 // %
+      battery: 100,             // %
+      glowReady: true,          // devient false à froid jusqu'à fin préchauffage
+      glowUntil: 0,             // timestamp fin préchauffage
+      starterTimeout: 0,        // limite d'activation (anti-abus)
+    }
+
+    // ======= HELPERS =======
+    const q = sel => document.querySelector(sel);
+    const logDiv = q('#log');
+    function log(msg){
+      const time = new Date().toLocaleTimeString();
+      const p = document.createElement('div');
+      p.textContent = `[${time}] ${msg}`;
+      logDiv.prepend(p);
+    }
+
+    function setLamp(el, mode){
+      el.className = 'lamp ' + (mode==='on'?'on': mode==='warn'?'warn': mode==='bad'?'bad':'off');
+      el.textContent = mode==='on'?'ON': mode==='warn'?'ATTN': mode==='bad'?'ALERTE':'OFF';
+    }
+
+    function updateUI(){
+      // texts
+      q('#engineState').textContent = state.engine;
+      q('#rpm').textContent = Math.round(state.rpm);
+      q('#rpmBar').style.width = Math.min(100, state.rpm/30) + '%'; // 3000 rpm => ~100%
+      q('#clutchVal').textContent = state.clutch;
+      q('#throttleVal').textContent = state.throttle;
+      q('#tempOutVal').textContent = state.tempOut;
+      q('#fuelVal').textContent = state.fuel;
+      q('#batVal').textContent = state.battery;
+
+      // lamps
+      setLamp(q('#lampBatt'), (state.key!=='OFF' && state.engine!=='RUNNING') ? 'warn' : 'off');
+      setLamp(q('#lampOil'),  (state.key!=='OFF' && state.engine!=='RUNNING') ? 'warn' : 'off');
+      setLamp(q('#lampGlow'), (!state.glowReady && state.key==='ON') ? 'warn' : (state.key==='ON' && state.tempOut<=5 ? 'on' : 'off'));
+      setLamp(q('#lampN'), state.gear==='N' ? 'on':'off');
+      setLamp(q('#lampPark'), state.park ? 'on':'off');
+
+      const warn = q('#lampWarn');
+      let warnMode = 'off';
+      if(state.fuel<=3) warnMode='bad';
+      else if(state.battery<=15) warnMode='bad';
+      else if(state.key==='START' && state.battery<25) warnMode='warn';
+      setLamp(warn, warnMode);
+
+      // key UI highlight
+      document.querySelectorAll('.key .pos').forEach(n=>{
+        n.classList.toggle('active', n.dataset.pos===state.key);
+      });
+
+      // switches
+      q('#park').classList.toggle('on', state.park);
+    }
+
+    function setKey(pos){
+      if(pos==='START'){
+        // START is momentary; validate conditions
+        if(state.key==='OFF'){ log('Passez d\'abord par ON.'); return; }
+        if(state.engine==='RUNNING'){ log('Moteur déjà en marche.'); return; }
+        if(Date.now() < state.starterTimeout){ log('Démarreur chaud, attendez un instant.'); return; }
+        if(state.gear!=='N'){ log('Sécurité : mettez au point mort.'); return; }
+        if(state.clutch<80){ log('Appuyez à fond sur l\'embrayage (≥80%).'); return; }
+        if(state.fuel<5){ log('Carburant insuffisant.'); return; }
+        if(state.battery<20){ log('Batterie trop faible pour lancer le démarreur.'); return; }
+        if(state.tempOut<=5 && !state.glowReady){ log('Attendez la fin du préchauffage.'); return; }
+
+        state.key='START'; updateUI();
+        startCranking();
+        return;
+      }
+
+      state.key = pos;
+      if(pos==='OFF'){
+        if(state.engine==='RUNNING') stopEngine('OFF');
+      }
+      if(pos==='ON'){
+        beginPreheatIfCold();
+      }
+      updateUI();
+    }
+
+    function beginPreheatIfCold(){
+      state.glowReady = true;
+      if(state.tempOut<=5){
+        // Preheat time 1.2s .. 3.5s depending on temperature
+        const t = 1200 + (Math.min(5, 5 - state.tempOut) * 460);
+        state.glowReady = false;
+        state.glowUntil = Date.now() + t;
+        log('Préchauffage…');
+        setTimeout(()=>{
+          state.glowReady = true; updateUI(); log('Préchauffage terminé.');
+        }, t);
+      }
+    }
+
+    function startCranking(){
+      state.engine='CRANKING'; updateUI();
+      const crankTime = 900 + Math.random()*500; // 0.9–1.4s
+      let crankRPM = 0;
+      const t0 = performance.now();
+      const crank = () => {
+        const dt = performance.now()-t0;
+        crankRPM = 250 + 50*Math.sin(dt/80);
+        state.rpm = crankRPM; updateUI();
+        if(dt>=crankTime){
+          // success chance depends on battery & fuel
+          const p = (state.battery/100)*0.8 + (state.fuel/100)*0.2; // simple model
+          if(Math.random() < p){
+            runEngine();
+          } else {
+            stopEngine('RATÉ');
+            state.starterTimeout = Date.now()+1200; // cooldown
+            log('Démarrage raté. Vérifiez batterie/carburant/préchauffage.');
+          }
+        } else if(state.key!=='START'){
+          stopEngine('ABANDON');
+        } else {
+          requestAnimationFrame(crank);
+        }
+      }
+      requestAnimationFrame(crank);
+    }
+
+    function runEngine(){
+      state.engine='RUNNING'; state.key='ON';
+      let idle = 750; // rpm
+      let target = idle;
+      let last = performance.now();
+
+      function step(){
+        const now = performance.now();
+        const dt = (now-last)/1000; last=now;
+
+        // target rpm = idle + throttle*20 (=> max ~2750)
+        idle = 700 + Math.max(0, 50 - (state.tempOut))*1.2; // idle a bit higher when cold
+        target = idle + state.throttle*20;
+
+        // crude physics: gear load may pull RPM down if embrayage relâché
+        const load = (state.gear==='N' || state.clutch>20) ? 0 : (state.gear==='1'? 300: 500);
+        target -= load;
+        target = Math.max(0, target);
+
+        // smooth towards target
+        state.rpm += (target - state.rpm) * Math.min(1, dt*3.5);
+
+        // fuel & battery effects
+        if(state.fuel<=1){ stopEngine('PANNE SÈCHE'); log('Le moteur s\'est arrêté (plus de carburant).'); return; }
+        if(state.battery<5 && state.rpm<600){ stopEngine('CALAGE'); log('Calage : batterie faible + bas régime.'); return; }
+
+        // possible stall if en prise & embrayage relâché & faible gaz
+        if(state.gear!=='N' && state.clutch<10 && state.rpm<600 && state.throttle<10){ stopEngine('CALAGE'); log('Calage – relancez avec embrayage et un peu de gaz.'); return; }
+
+        // update bars/lamps
+        updateUI();
+        if(state.engine==='RUNNING') requestAnimationFrame(step);
+      }
+
+      log('Moteur en marche ✔');
+      requestAnimationFrame(step);
+    }
+
+    function stopEngine(reason){
+      if(state.engine==='OFF') return;
+      if(reason==='CALAGE'){ state.engine='STALLED'; }
+      else state.engine='OFF';
+      state.rpm=0; updateUI();
+      if(reason) log(`Moteur arrêté (${reason}).`);
+    }
+
+    // ======= EVENTS =======
+    q('#btnN').addEventListener('click', ()=>{ state.gear='N'; updateUI(); log('Boîte : point mort.'); });
+    q('#btnG1').addEventListener('click', ()=>{ state.gear='1'; updateUI(); log('Boîte : vitesse 1 engagée.'); });
+    q('#btnG2').addEventListener('click', ()=>{ state.gear='2'; updateUI(); log('Boîte : vitesse 2 engagée.'); });
+
+    q('#park').addEventListener('click', ()=>{ state.park=!state.park; updateUI(); log('Frein de parking ' + (state.park?'activé.':'relâché.')); });
+
+    q('#clutch').addEventListener('input', e=>{ state.clutch=+e.target.value; q('#clutchVal').textContent=state.clutch; });
+    q('#throttle').addEventListener('input', e=>{ state.throttle=+e.target.value; q('#throttleVal').textContent=state.throttle; });
+
+    q('#tempOut').addEventListener('input', e=>{ state.tempOut=+e.target.value; q('#tempOutVal').textContent=state.tempOut; if(state.key==='ON') beginPreheatIfCold(); });
+    q('#fuel').addEventListener('input', e=>{ state.fuel=+e.target.value; q('#fuelVal').textContent=state.fuel; });
+    q('#battery').addEventListener('input', e=>{ state.battery=+e.target.value; q('#batVal').textContent=state.battery; });
+
+    // Key positions UI
+    document.querySelectorAll('.key .pos').forEach(n=>{
+      n.addEventListener('mousedown', ()=>{
+        const pos = n.dataset.pos;
+        if(pos==='START'){
+          setKey('START');
+          // START is momentary; auto release after 1s
+          setTimeout(()=>{ if(state.key==='START') { state.key='ON'; updateUI(); } }, 1100);
+        } else {
+          setKey(pos);
+        }
+      });
+    });
+
+    // Keyboard shortcuts
+    window.addEventListener('keydown', e=>{
+      const k = e.key.toLowerCase();
+      if(k==='n') { state.gear='N'; log('Point mort.'); }
+      if(k==='1') { state.gear='1'; log('Vitesse 1.'); }
+      if(k==='2') { state.gear='2'; log('Vitesse 2.'); }
+      if(k==='p') { state.park=!state.park; log('Frein parking ' + (state.park?'activé.':'relâché.')); }
+      if(k==='c') { state.clutch=100; q('#clutch').value=100; }
+      if(k==='x') { state.clutch=0; q('#clutch').value=0; }
+      if(k==='o') setKey('ON');
+      if(k==='f') setKey('OFF');
+      if(k==='s') setKey('START');
+      updateUI();
+    });
+
+    // Initial
+    updateUI();
+    log('Bienvenue ! Procédure : frein parking ON → point mort → clé sur ON → (si froid, attendre préchauffage) → embrayage 100% → START.');
+  </script>
+</body>
+</html>

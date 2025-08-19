@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur Changement de Vitesse</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="simulator">
+        <div id="message-box"></div>
+        <div id="instructions">
+            <h2>Guide du changement de vitesse</h2>
+            <p id="step-text">Appuie sur <strong>A</strong> pour l'embrayage.</p>
+        </div>
+
+        <div id="car-container">
+            <img id="car" src="image/car2.png" height="80px" alt="Voiture">
+        </div>
+
+        <div id="controls">
+            <div id="pedals">
+                <div class="pedal" id="clutch">Embrayage</div>
+                <div class="pedal" id="gas">Accélérateur</div>
+            </div>
+            <div id="gearbox">Vitesse : <span id="gear">1</span></div>
+        </div>
+    </div>
+    <script src="script_changement_vitesse.js"></script>
+</body>
+</html>

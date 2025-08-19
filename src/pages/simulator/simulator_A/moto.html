@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulateur Démarrage Moto</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(#0f2027, #203a43, #2c5364);
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    #message-box {
+      background: rgba(0,0,0,0.4);
+      padding: 10px;
+      border-radius: 5px;
+      min-height: 40px;
+      margin-bottom: 10px;
+    }
+    #moto-container {
+      position: relative;
+      height: 200px;
+      margin: 20px auto;
+      width: 80%;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+    }
+    #moto-container img {
+      width: 15vw;
+      height: auto;
+    }
+    #moto {
+      position: absolute;
+      left: 0;
+      transition: left 0.1s linear;
+    }
+    #controls {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 15px;
+    }
+    .pedal {
+      background: #444;
+      padding: 10px;
+      border-radius: 5px;
+      width: 120px;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .pedal.active {
+      background: #0f0;
+      transform: scale(1.05);
+    }
+    #gearbox {
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🏍️ Simulateur Démarrage Moto</h1>
+  <div id="message-box"></div>
+  <div id="instructions">
+    <h2>Guide</h2>
+    <p id="step-text">Appuie sur <strong>A</strong> pour l'embrayage.</p>
+  </div>
+
+  <div id="moto-container">
+    <img id="moto" src="moto.png" alt="Moto"> <!-- Mets ton image ici -->
+  </div>
+
+  <div id="controls">
+    <div class="pedal" id="clutch">Embrayage</div>
+    <div class="pedal" id="gas">Accélérateur</div>
+  </div>
+  <div id="gearbox">Vitesse : <span id="gear">N</span></div>
+
+  <script>
+    let clutchPressed = false;
+    let gasPressed = false;
+    let currentGear = 'N';
+    let motoPosition = 0;
+    let step = 1;
+
+    const stepText = document.getElementById("step-text");
+    const clutch = document.getElementById("clutch");
+    const gas = document.getElementById("gas");
+    const gearBox = document.getElementById("gear");
+    const messageBox = document.getElementById("message-box");
+    const moto = document.getElementById("moto");
+
+    function showMessage(msg) {
+      messageBox.textContent = msg;
+    }
+
+    function proceedStep() {
+      switch(step) {
+        case 1:
+          stepText.innerHTML = "Appuie sur <strong>A</strong> pour l'embrayage.";
+          break;
+        case 2:
+          stepText.innerHTML = "Passe la 1ère vitesse (<strong>1</strong>).";
+          break;
+        case 3:
+          stepText.innerHTML = "Relâche l'embrayage et appuie sur <strong>D</strong> pour avancer.";
+          break;
+        case 4:
+          showMessage("🏍️ Moto démarrée avec succès !");
+          stepText.textContent = "";
+          break;
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      switch(e.key.toLowerCase()) {
+        case 'a':
+          clutchPressed = true;
+          if(step === 1) { step = 2; proceedStep(); }
+          break;
+        case '1':
+          if(clutchPressed && step === 2) {
+            currentGear = '1';
+            gearBox.textContent = '1';
+            step = 3;
+            proceedStep();
+          }
+          break;
+        case 'd':
+          gasPressed = true;
+          break;
+      }
+      updatePedals();
+    });
+
+    document.addEventListener('keyup', (e) => {
+      switch(e.key.toLowerCase()) {
+        case 'a':
+          clutchPressed = false;
+          break;
+        case 'd':
+          gasPressed = false;
+          break;
+      }
+      updatePedals();
+    });
+
+    function updatePedals() {
+      clutch.classList.toggle('active', clutchPressed);
+      gas.classList.toggle('active', gasPressed);
+    }
+
+    function moveMoto() {
+      if(currentGear === '1' && !clutchPressed && gasPressed) {
+        motoPosition += 1.5;
+        moto.style.left = motoPosition + 'px';
+        if(motoPosition > 200 && step < 4) {
+          step = 4;
+          proceedStep();
+        }
+      }
+      requestAnimationFrame(moveMoto);
+    }
+
+    proceedStep();
+    moveMoto();
+  </script>
+</body>
+</html>

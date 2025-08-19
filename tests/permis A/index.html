@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Distance de sécurité - Permis A</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+      padding: 10px;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 15px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    h1 {
+      font-size: 1.5em;
+      margin-bottom: 15px;
+    }
+    input {
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      width: 80%;
+      font-size: 1em;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 1em;
+      border: none;
+      border-radius: 10px;
+      background-color: #4fc3f7;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #29b6f6;
+    }
+    .result {
+      margin-top: 15px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Calculateur de Distance de Sécurité</h1>
+    <p>Entrez votre vitesse (km/h) :</p>
+    <input type="number" id="vitesse" min="0" placeholder="Ex: 50">
+    <br>
+    <button onclick="calculer()">Calculer</button>
+    <div class="result" id="resultat">Distance : — m</div>
+  </div>
+
+  <script>
+    function calculer() {
+      let vitesse = document.getElementById("vitesse").value;
+      if (vitesse === "" || vitesse <= 0) {
+        document.getElementById("resultat").textContent = "Veuillez entrer une vitesse valide.";
+        return;
+      }
+      let distance = vitesse / 2; // règle simple
+      document.getElementById("resultat").textContent = "Distance : " + distance + " m";
+    }
+  </script>
+
+</body>
+</html>

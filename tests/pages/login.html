@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Inscription</h2>
+        <form action="traitement_inscription.php" method="POST">
+            <input type="text" id="nom" name="nom" required placeholder="nom">
+            <input type="email" id="email" name="email" required placeholder="email">
+            <input type="password" id="password" name="password" required placeholder="password">
+            <input type="password" id="confirm_password" name="confirm_password" required placeholder="confirm_password">
+            <button type="submit">S'inscrire</button>
+        </form>
+        <p>Déjà un compte ? <a href="">Connectez-vous</a></p>
+    </div>
+</body>
+</html>

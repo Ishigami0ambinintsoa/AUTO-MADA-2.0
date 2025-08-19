@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Bilingue Exemple</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="traduction.js" defer></script> <!-- Fichier contenant les textes -->
+    <script src="script.js" defer></script>     <!-- Script qui gère le changement de langue -->
+</head>
+<body>
+
+    <!-- Boutons pour changer de langue -->
+    <div class="langues">
+        <button onclick="changerLangue('fr')">Français 🇫🇷</button>
+        <button onclick="changerLangue('mg')">Malagasy 🇲🇬</button>
+    </div>
+
+    <!-- Contenu avec des ID pour chaque texte à traduire -->
+    <h1 id="titreAccueil"></h1>
+    <p id="descriptionAccueil"></p>
+    <button id="boutonQuiz"></button>
+
+</body>
+</html>

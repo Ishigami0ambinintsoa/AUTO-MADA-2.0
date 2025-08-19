@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur Démarrage Camion</title>
+    <link rel="stylesheet" href="../../../css/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(#1e3c72, #2a5298);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        #message-box {
+            background: rgba(0,0,0,0.4);
+            padding: 10px;
+            border-radius: 5px;
+            min-height: 40px;
+            margin-bottom: 10px;
+        }
+        #car-container {
+            position: relative;
+            height: 200px;
+            margin: 20px auto;
+            width: 80%;
+            overflow: hidden;
+        }
+        #car-container img{
+            width: 20vw;
+            height: auto;
+        }
+        #truck {
+            position: absolute;
+            left: 0;
+            transition: left 0.1s linear;
+        }
+        #controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .pedal {
+            background: #444;
+            padding: 10px;
+            border-radius: 5px;
+            width: 100px;
+            transition: background 0.2s;
+        }
+        .pedal.active {
+            background: #0f0;
+        }
+        #gearbox {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navBar">
+            <div class="logo">
+                <img src="../../../assets/image/logo_AUTO-MADA.png"alt="">
+                <img src="../../../assets/image/logo_ispm.png" alt="">
+            </div>
+            <div class="navLinks">
+                <ul>
+                    <li><a id="home" href="index.html"></a></li>
+                    <li><a id="quiz" href="quiz.html"></a></li>
+                    <li><a id="lesson" href="lesson.html"></a></li>
+                    <li><a id="simulator" href="simulator.html"></a></li>
+                    <li><a id="about" href="A_propos.html"></a></li>
+                    <li><a id="contact" href="Contact.html"></a></li>
+                </ul>
+            </div>
+            <img src="../../../assets/icons/menu-btn.png" alt="menu hamburger" class="menu_Hamburger">
+            
+
+        </nav>
+    </header>
+
+    <div class="langues">
+        <button onclick="changerLangue('fr')">Français 🇫🇷</button>
+        <button onclick="changerLangue('mg')">Malagasy 🇲🇬</button>
+    </div>
+    <h1 id="titre"></h1>
+    <div id="message-box"></div>
+    <div id="instructions">
+        <h2>Guide</h2>
+        <p id="step-text">Appuie sur <strong>A</strong> pour l'embrayage.</p>
+    </div>
+
+    <div id="car-container">
+        <img id="truck" src="../../../assets/image/truc.png" height="80" alt="Camion">
+    </div>
+
+    <div id="controls">
+        <div class="pedal" id="clutch">Embrayage</div>
+        <div class="pedal" id="gas">Accélérateur</div>
+    </div>
+    <div id="gearbox">Vitesse : <span id="gear">N</span></div>
+
+    <script>
+        let clutchPressed = false;
+        let gasPressed = false;
+        let currentGear = 'N';
+        let truckPosition = 0;
+        let step = 1;
+        let moving = false;
+
+        const stepText = document.getElementById("step-text");
+        const clutch = document.getElementById("clutch");
+        const gas = document.getElementById("gas");
+        const gearBox = document.getElementById("gear");
+        const messageBox = document.getElementById("message-box");
+        const truck = document.getElementById("truck");
+
+        function showMessage(msg) {
+            messageBox.textContent = msg;
+        }
+
+        function proceedStep() {
+            switch(step) {
+                case 1:
+                    stepText.innerHTML = "Appuie sur <strong>A</strong> pour l'embrayage.";
+                    break;
+                case 2:
+                    stepText.innerHTML = "Passe la 1ère vitesse (<strong>1</strong>).";
+                    break;
+                case 3:
+                    stepText.innerHTML = "Relâche l'embrayage et appuie sur <strong>D</strong> pour avancer.";
+                    break;
+                case 4:
+                    showMessage("🚛 Camion démarré avec succès !");
+                    stepText.textContent = "";
+                    break;
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            switch(e.key.toLowerCase()) {
+                case 'a':
+                    clutchPressed = true;
+                    if(step === 1) { step = 2; proceedStep(); }
+                    break;
+                case '1':
+                    if(clutchPressed && step === 2) {
+                        currentGear = '1';
+                        gearBox.textContent = '1';
+                        step = 3;
+                        proceedStep();
+                    }
+                    break;
+                case 'd':
+                    gasPressed = true;
+                    break;
+            }
+            updatePedals();
+        });
+
+        document.addEventListener('keyup', (e) => {
+            switch(e.key.toLowerCase()) {
+                case 'a':
+                    clutchPressed = false;
+                    break;
+                case 'd':
+                    gasPressed = false;
+                    break;
+            }
+            updatePedals();
+        });
+
+        function updatePedals() {
+            clutch.classList.toggle('active', clutchPressed);
+            gas.classList.toggle('active', gasPressed);
+        }
+
+        function moveTruck() {
+            if(currentGear === '1' && !clutchPressed && gasPressed) {
+                truckPosition += 1;
+                truck.style.left = truckPosition + 'px';
+                if(truckPosition > 200 && step < 4) {
+                    step = 4;
+                    proceedStep();
+                }
+            }
+            requestAnimationFrame(moveTruck);
+        }
+
+        proceedStep();
+        moveTruck();
+    </script>
+    <script src="../../../js/script_simulator/simulator_C/simulator_C01.js"></script>
+    <script src="../../../js/responsive.js"></script>
+    <script src="../../../js/traduction_script.js"></script>
+</body>
+</html>

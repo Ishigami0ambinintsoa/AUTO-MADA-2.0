@@ -1,0 +1,146 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f8ff;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background: #00aaff;
+  padding: 15px;
+  color: white;
+  text-align: center;
+}
+
+.logo {
+  margin: 0;
+}
+
+.quiz-section {
+  padding: 30px;
+  text-align: center;
+}
+
+.quiz-card {
+  background: white;
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.quiz-img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.quiz-question {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin: 8px 0;
+  text-align: left;
+}
+
+.btn {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: #00aaff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+footer {
+  text-align: center;
+  padding: 15px;
+  background: #eee;
+  margin-top: 50px;
+}
+html{
+  scroll-behavior: smooth;
+}
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  header {
+    position: fixed;
+    width: 100%;
+    background: #22b3c1;
+    color: white;
+    padding: 15px 0;
+  }
+  .logo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-content: space-between;
+    width: 300px;
+  }
+  .imgLogo{
+    height: 70px;
+  }
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    height: 60px;
+  }
+  
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  nav a {
+    color: white;
+    margin-left: 15px;
+    text-decoration: none;
+  }
+  
+
+    
+  .btn {
+    display: inline-block;
+    background: #22b3c1;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    margin-top: 10px;
+  }  
+  .feature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 15px;
+    height: 80vh;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  .img{
+    width: 400px;
+    aspect-ratio: 1/1;
+    border-radius: 30px;
+  }
+  footer {
+    background: #22b3c1;
+    color: white;
+    text-align: center;
+    padding: 20px;
+  }
+  

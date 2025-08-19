@@ -1,0 +1,1 @@
+-amelioration de la sructuration des assets pour faciliter la maintenance

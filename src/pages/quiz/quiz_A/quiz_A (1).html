@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>quiz</title>
+    <link rel="stylesheet" href="../../../css/style.css">
+</head>
+<body>
+    <header>
+        <nav class="navBar">
+            <div class="logo">
+                <img src="../../../assets/image/logo_AUTO-MADA.png"alt="">
+                <img src="../../../assets/image/logo_ispm.png" alt="">
+            </div>
+            <div class="navLinks">
+                <ul>
+                    <li><a id="home" href="../../index.html"></a></li>
+                    <li><a id="quiz" href="../../quiz.html"></a></li>
+                    <li><a id="lesson" href="../../lesson.html"></a></li>
+                    <li><a id="simulator" href="../../simulator.html"></a></li>
+                    <li><a id="about" href="../../A_propos.html"></a></li>
+                    <li><a id="contact" href="../../Contact.html"></a></li>
+                </ul>
+            </div>
+            <img src="../../../assets/icons/menu-btn.png" alt="menu hamburger" class="menu_Hamburger">
+            
+
+        </nav>
+    </header>
+
+    <div class="langues">
+        <button onclick="changerLangue('fr')">Français 🇫🇷</button>
+        <button onclick="changerLangue('mg')">Malagasy 🇲🇬</button>
+    </div>
+    <h1 id="titre"></h1>
+
+    <section id="quiz-section">
+        <img id="question-image" src="" alt="Image question" class="quiz-img">
+        <p id="question-text"></p>
+    
+        <form id="quiz-form">
+            <label><input type="radio" name="answer" value="A"> <span id="labelA"></span></label><br>
+            <label><input type="radio" name="answer" value="B"> <span id="labelB"></span></label><br>
+            <label><input type="radio" name="answer" value="C"> <span id="labelC"></span></label><br>
+            <button type="button" class="btn" id="btnValider">Valider</button>
+        </form>
+
+
+        
+    
+        <p id="feedback"></p>
+    </section>
+    
+    <script src="../../../js/responsive.js"></script>
+    <script src="../../../js/traduction_script.js"></script>
+    <script src="../../../js/script_quiz/quiz_A/quiz_A01.js"></script>
+</body>
+</html>

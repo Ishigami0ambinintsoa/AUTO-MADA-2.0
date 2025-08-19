@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+
+
+        <nav class="navBar">
+            <div class="logo">
+                <img src="../../src/assets/image/logo_AUTO-MADA.png"alt="">
+                <img src="../../src/assets/image/logo_ispm.png" alt="">
+            </div>
+
+            <div class="navLinks">
+                <ul>
+                    <li><a href="#Accueil">Accueil</a></li>
+                    <li><a href="#Commencer">Commencer</a></li>
+                    <li><a href="#A_propos">A propos</a></li>
+                    <li><a href="#Contact">Contact</a></li>        
+                </ul>
+            </div>
+            <img src="../responsive/menu-btn.png" alt="menu hamburger" class="menu_Hamburger">
+                
+        </nav>
+        
+    </header>  
+    
+    <script>  
+        const menuHamburger = document.querySelector(".menu_Hamburger")
+        const navLinks = document.querySelector(".navLinks")
+
+        menuHamburger.addEventListener('click',()=>{
+        navLinks.classList.toggle('mobile-menu')
+        })
+    </script>    
+</body>
+</html>

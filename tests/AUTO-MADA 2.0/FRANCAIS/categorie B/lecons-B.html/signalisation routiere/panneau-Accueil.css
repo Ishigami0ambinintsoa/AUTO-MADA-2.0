@@ -1,0 +1,146 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Raleway', sans-serif;
+
+
+}
+
+a {
+    text-decoration: 0;
+}
+
+html {
+    font-family: 62.5%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 9px;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+}
+
+body {
+    background-color: white;
+}
+
+section {
+    margin-top: 50px;
+
+
+}
+
+.logo {
+    display: flex;
+    justify-content: space-around;
+
+    img {
+        
+        height: 90px;
+        width: 90px;/
+    }
+
+    /* padding-right:  */
+}
+
+
+header {
+    background-color: #22b3c1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 90px;
+    width: 100%;
+    padding: 0 3%;
+
+
+}
+
+.menu {
+    display: flex;
+    align-items: center;
+}
+
+
+.menu li {
+    margin: 0 15px;
+    list-style-type: none;
+}
+
+.menu li a {
+    color: rgb(255, 255, 255);
+    font-size: 20px;
+}
+
+.btn-visite {
+    background-color: #22b3c1;
+    font-size: 18px;
+    border: 10px solid #22b3c1;
+    transition: 0.5s;
+    font-weight: bolder;
+    border-radius: 10px;
+}
+
+.btn-visite:hover {
+    background-color: #a6adad;
+    color: #fff;
+}
+
+/* corps d'acceuil*/
+
+#home {
+    background: linear-gradient(rgba(0, 0, 0, 0.1), #242323), url("fond2.jpg");
+    background-position: center;
+    background-size: cover;
+    height: calc(100vh - 50px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+}
+
+#home h2 {
+    font-size: 60px;
+    margin-bottom: 30px;
+    font-weight: 700;
+    -webkit-text-stroke: rgb(135, 218, 239) 2px;
+    color: transparent;
+}
+
+#home h4 {
+    color: white;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: 100 !important;
+}
+
+.home-btn {
+    
+    margin-top: 10px;
+    padding-inline: auto;
+    width: 290px;
+    text-align: center;
+}
+
+/*pieds de page*/
+footer{
+    text-align: center;
+    padding: 20px;
+    background: #22b3c1;
+    color: white;
+}
+#project{
+    text-align: center;
+    padding: 50px;
+} 

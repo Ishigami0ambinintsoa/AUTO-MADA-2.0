@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="acceuil-lecons_B.css">
+    <link rel="stylesheet" href="acceuil_B.css">
+
+
+    <title>acceuil</title>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            <img src="../../logo 560 490.png" alt="Logo Auto Mada">
+        </div>
+        <button class="menu-toggle" aria-label="Ouvrir le menu" onclick="document.querySelector('.menu').classList.toggle('open')">
+            <span style="font-size:2rem;">&#9776;</span>
+        </button>
+        <ul class="menu">
+            <li><a href="../../acceuil-2_.html8">Langue</a></li>
+            <li><a href="../quiz tena izy/quizAccueil.html">Quiz</a></li>
+            <li><a href="../jeu/jeuAccueil.html">Simulateur</a></li>
+            <li><a href="../acceuil-2.html#contact">Contactez</a></li>
+            <li>
+                <img style="height: 130px; width: 130px;" src="../../ispm-logo-removebg-preview (1).png" alt="Logo ISPM">
+            </li>
+        </ul>
+    </header>
+    <!--corps d'acceuil-->
+
+    <section id="home">
+        <h2>BIENVENUE sur la CATEGORIE B</h2>
+        <h4 class="typing">Le site pour apprendre le code de la route de categorie B à Madagascar , de manière simple et amusante !</h4>
+        <a href="#Leçons" class="btn-visite home-btn">Commencer</a>
+    </section>
+
+    <section class="feature" id="Leçons">
+      
+        <h3>Leçons 📘</h3>
+        <p>Comprends les règles de conduite de categoire B avec des explications claires et illustrées.</p>
+        <a href="lecons-B.html/accuiel-lecons-B.html" class="btn">Voir les leçons</a>
+      
+    </section>
+
+    <section class="feature" id="Quiz">
+      <h3>Quiz 🧠</h3>
+      <p>Teste tes connaissances sur la categorie B avec des quiz interactifs et corrigés.</p>
+      <a href="quiz/quizAccueil.html" class="btn">Faire un quiz</a>  
+    </section>
+
+    <section class="feature" id="jeu">
+      <h3>Simulateur 🎮</h3>
+      <p>Teste vos capacité de conduit voiture avec le simulateur.</p>
+      <a href="jeu/jeuAccueil.html" class="btn">Allez au simulateur</a>  
+    </section>
+
+
+    <!--SEction contact-->
+    <section id="contact">
+        <h2>Contactez-nous</h2>
+        <p>N'hésitez pas de nous contactez s'il y a de probleme sur le site web AUTO-MADA:</p>
+        <form>
+            <input type="text" placeholder="Votre Nom" required>
+            <input type="email" placeholder="Votre Email" required>
+            <textarea placeholder="Votre Message" required></textarea>
+            <button type="submit">Envoyer</button>
+        </form>
+
+    </section>
+
+    </main>
+
+    <!--Pied du page-->
+    <footer>
+        <p>&copy; Projet IGGLIA1B - 2025</p>
+    </footer>
+
+
+</body>
+<style>
+    .menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        z-index: 2000;
+    }
+    @media (max-width: 768px) {
+        .menu-toggle {
+            display: block;
+        }
+        .menu {
+            display: none;
+            flex-direction: column;
+            background: #22b3c1;
+            position: absolute;
+            top: 90px;
+            right: 0;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .menu.open {
+            display: flex;
+        }
+    }
+</style>
+
+</html>

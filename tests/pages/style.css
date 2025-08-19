@@ -1,0 +1,179 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.container {
+    background:#333;
+    padding: 30px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 350px;
+    text-align: center;
+}
+
+h2 {
+    color: orange;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    text-align: left;
+    margin: 10px 0 5px;
+}
+
+input,textarea {
+    padding: 10px;
+    margin: 10px 0px;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+}
+
+button {
+    margin-top: 15px;
+    padding: 10px;
+    background: orange;
+    border: none;
+    border-radius: 5px;
+    color: #333;
+    font-size: 1.1em;
+    cursor: pointer;
+}
+
+button:hover {
+    background: orange;
+}
+
+p {
+    margin-top: 15px;
+}
+
+a {
+    color: orange;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+
+
+
+
+
+
+*{
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    list-style: none;
+}
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+header{
+    height: 100vh;
+    width: 100vw;
+    background-image: url(../../../src/assets/image/accueil_PC.jpg);
+    background-size: cover;
+}
+
+.navBar{
+    position: absolute;
+    padding: 50px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    align-items: center;
+}
+
+.logo{
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.navBar .navLinks ul{
+    display: flex;    
+}
+.navBar .navLinks ul li{
+    margin: 0 25px;
+}
+
+.active a{
+    color: red;
+     ;
+}
+
+
+.menu_Hamburger{
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    width: 30px;
+}
+
+@media screen and (max-width:900px) {
+    .navBar{
+        padding: 0;
+        margin: 0;
+    }
+
+    .navBar .logo{
+        position: absolute;
+        top: 50px;
+        left: 50px ;
+    }
+
+
+    .navLinks{
+        top: 0;
+        left: 0;
+        position: absolute;
+        background-color: rgba(255, 255, 255, 0.167);
+        backdrop-filter: blur(8px );
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: -100%;
+        transition: all 0.5s;
+    }
+
+    .mobile-menu{
+        margin-left: 0;
+        
+    }
+
+    .navLinks ul{
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    .navLinks ul li{
+        margin: 25px 0;
+        font-size: 1.2em;
+    }
+    
+    .menu_Hamburger{
+        display: block;
+    }
+}

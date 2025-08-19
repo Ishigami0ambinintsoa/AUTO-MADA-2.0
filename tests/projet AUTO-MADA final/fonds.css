@@ -1,0 +1,87 @@
+body{
+    background: linear-gradient(rgba(0, 0, 0, 0.6), #242323e8), url("autoMada/logo\ 560\ 490.png");
+      background-size:cover ;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.contenue {
+    padding: 40px 80px;
+    border: 5px solid black;
+    border-radius: 0;
+    animation: border-shape 6s infinite alternate ease-in-out, border-glow 4s infinite linear;
+    box-shadow: 0 0 20px aqua, 0 0 40px aqua, 0 0 60px aqua;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), #242323e8), rgba(12, 229, 113, 0.845);
+      background-size:cover ;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.style{
+    font-family: 'Arial Black', sans-serif;
+    font-size: 80px;
+    color:red;
+    text-transform: uppercase;
+    animation: text-glow 4s infinite linear;
+    text-decoration: none;
+}
+
+    /*animmation de la lumiere du texte*/
+    @keyframes text-glow{
+        0% {
+                text-shadow: 0 0 5px aqua, 0 0 15px aqua, 0 0 30px aqua;
+        }
+        25% {
+                text-shadow: 0 0 5px violet, 0 0 15px violet, 0 0 30px violet;  
+        }
+        50% {
+                 text-shadow: 0 0 5px rgba(0, 255, 0, 0.551), 0 0 15px rgba(0, 255, 0, 0.551), 0 0 30px rgba(0, 255, 0, 0.551); 
+        }
+        75% {
+                text-shadow: 0 0 5px rgba(0, 136, 255, 0.558), 0 0 15px rgba(0, 136, 255, 0.558) , 0 0 30px rgba(0, 136, 255, 0.558); 
+        }
+        100% {
+                text-shadow: 0 0 5px aqua, 0 0 15px aqua, 0 0 30px aqua;
+        }
+    }
+
+    /*animmation de la fomrne de la cadre*/
+
+    @keyframes border-shape {
+        0% {
+            border-radius: 0%;
+        }
+        100%{
+            border-radius: 50%;
+        }
+    }
+
+    /*animation de cadre*/
+
+    @keyframes border-glow {
+        0% {
+            box-shadow: 0 0 20px aqua, 0 0 40px aqua, 0 0 60px aqua;
+            border-color: aqua;
+        }
+        25% {
+            box-shadow: 0 0 20px violet, 0 0 40px violet, 0 0 60px violet;
+            border-color: violet;
+        }
+        50% {
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.551), 0 0 40px rgba(0, 255, 0, 0.551), 0 0 60px rgba(0, 255, 0, 0.551);
+            border-color: rgba(0, 255, 0, 0.551);
+        }
+        75% {
+            box-shadow: 0 0 20px rgba(0, 136, 255, 0.558), 0 0 40px rgba(0, 136, 255, 0.558), 0 0 60px rgba(0, 136, 255, 0.558);
+            border-color: blue;
+        }
+        100% {
+            box-shadow: 0 0 20px aqua, 0 0 40px aqua, 0 0 60px aqua;
+            border-color: aqua;
+        }
+    }
+    

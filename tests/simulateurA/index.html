@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulateur Démarrage Moto</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 20px;
+      overflow-x: hidden; /* Évite les scrollbars quand la moto part */
+    }
+
+    h1 {
+      margin-bottom: 30px;
+    }
+
+    .moto-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    button {
+      padding: 12px 20px;
+      margin: 5px;
+      font-size: 1em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background-color: #4fc3f7;
+      color: white;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #29b6f6;
+    }
+
+    .poignee {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+    }
+
+    #feedback {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+
+    /* Sprite moto */
+    .moto {
+      width: 100px;
+      position: relative;
+      margin-top: 20px;
+      transition: transform 2s linear;
+    }
+
+    .moto.run {
+      transform: translateX(500px);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Simulateur Démarrage Moto</h1>
+
+  <div class="moto-container">
+    <div class="poignee">
+      <button id="embrayage">Poignée Gauche (Embrayage)</button>
+      <button id="accelerateur">Poignée Droite (Accélérateur)</button>
+    </div>
+    <button id="starter">Démarrer Moto</button>
+
+    <div id="feedback">Appuie sur l’embrayage puis sur starter pour démarrer !</div>
+
+    <!-- Image de la moto -->
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Motorcycle_silhouette.svg/640px-Motorcycle_silhouette.svg.png" 
+         alt="Moto" id="moto" class="moto">
+  </div>
+
+  <script>
+    let embrayageAppuye = false;
+    let accelerateurAppuye = false;
+
+    const feedback = document.getElementById("feedback");
+    const moto = document.getElementById("moto");
+
+    document.getElementById("embrayage").addEventListener("click", () => {
+      embrayageAppuye = true;
+      feedback.textContent = "Embrayage actionné ✅";
+    });
+
+    document.getElementById("accelerateur").addEventListener("click", () => {
+      accelerateurAppuye = true;
+      feedback.textContent = "Accélérateur prêt ✅";
+    });
+
+    document.getElementById("starter").addEventListener("click", () => {
+      if (embrayageAppuye) {
+        feedback.textContent = "🚀 Moto démarrée ! Bonne conduite !";
+        moto.classList.add("run"); // Lancer l’animation
+      } else {
+        feedback.textContent = "⚠️ Appuie sur l’embrayage avant de démarrer !";
+      }
+
+      // Reset après l’animation
+      setTimeout(() => {
+        moto.classList.remove("run");
+        embrayageAppuye = false;
+        accelerateurAppuye = false;
+      }, 2500);
+    });
+  </script>
+
+</body>
+</html>
