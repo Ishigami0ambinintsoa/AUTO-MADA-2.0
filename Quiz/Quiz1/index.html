@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Quiz Code de la Route — 10 questions</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <img src="danger/logo_ispm.png" class="quiz-logo">
+  <div class="container">
+    <header>
+      <h1>📘 Quiz 1 : Panneaux de Danger</h1>
+      <div class="meta">Question :<strong id="qnum">1</strong>/10</div>
+    </header>
+
+    <section class="card" id="quiz">
+      <div class="question-area">
+        <div class="q-left">
+          <h2 id="question-text">Question text</h2>
+          <p id="explain" style="color:var(--muted);margin-top:6px"></p>
+          <div class="choices" id="choices"></div>
+          <div class="controls" style="margin-top:12px">
+            <button id="nextBtn">Valider / Suivant</button>
+            <button id="skipBtn" class="ghost">Passer</button>
+            <button id="resetBtn" class="ghost">Réinitialiser</button>
+            <button class="autre" onclick="window.location.href='../accueil.html'">Autre Quiz</button>
+
+          </div>
+        </div>
+
+        
+
+        <aside class="q-right">
+          <div class="img-wrap">
+            <img id="question-image" src="" alt="" />
+          </div>
+        
+          <div style="width:100%">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <small style="color:var(--muted)">Temps par question:</small>
+              <strong id="timer">—</strong>
+            </div>
+            <div class="progress" aria-hidden="true" style="margin-top:8px"><i id="progressBar"></i></div>
+
+            <div class="results" id="resultsBox">
+              <div class="summary"><div>Score: <strong id="score">0</strong></div><div id="final-msg" style="color:var(--muted)"></div></div>
+              <div id="review" style="margin-top:10px;color:var(--muted);font-size:14px"></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </div>
+  <script>
+    // Questions array: text, choices, correct index (0-based), explanation, image
+  const questions = [
+    {
+      q: "Que signifie ce panneau Triangle avec un cerf ?",
+      img: "danger/1.png",
+      choices: ["Interdiction de chasser","Passage d’animaux sauvages","Réserve naturelle","Passage obligatoire pour cavaliers"],
+      a: 1,
+      exp: "👉 Explication : Ce panneau avertit d’un risque de traversée d’animaux (cerfs, sangliers)."
+    },
+    {
+      q: "Que signifie ce panneau Triangle avec un point d’exclamation ❗ ?",
+      img: "danger/2.png",
+      choices: ["Obligation de s’arrêter","Danger non précisé","Feu tricolore","Route barrée"],
+      a: 1,
+      exp: "👉 Explication : Ce panneau avertit d’un danger indéfini, précisé en dessous par un panonceau."
+    },
+    {
+      q: "Que signifie ce panneau Triangle avec un vélo ?",
+      img: "danger/3.png",
+      choices: ["Interdiction aux vélos","Passage de cyclistes","Parking vélo","Départ de piste cyclable"],
+      a: 1,
+      exp: "👉 Explication : Signale un lieu de traversée ou fréquentation importante de vélos."
+    },
+    {
+      q: "Que signifie un panneau Triangle avec une voiture et des cailloux qui tombent ?",
+      img: "danger/4.png",
+      choices: ["Route abîmée","Route glissante","Chute de pierres","Route en travaux"],
+      a: 2,
+      exp: "👉 Explication : Risque de pierres tombant sur la chaussée, vigilance accrue."
+    },
+    {
+      q: "Que signifie ce panneau Triangle avec enfant qui court ?",
+      img: "danger/5.png",
+      choices: ["Passage piéton","Interdit aux enfants","Attention école","Aire de jeux"],
+      a: 2,
+      exp: "👉 Explication : Signale la proximité d’une école ou d’un lieu fréquenté par des enfants."
+    },
+    {
+      q: "Que signifie ce panneau Triangle avec un bonhomme et une pelle ?",
+      img: "danger/6.png",
+      choices: ["Route barrée","Travaux","Zone piétonne","Aire de repos"],
+      a: 1,
+      exp: "👉 Explication : Indique des travaux sur ou à proximité de la chaussée."
+    },
+    {
+      q: "Que signifie le panneau Triangle avec flèche zigzag ?",
+      img: "danger/7.png",
+      choices: ["Route glissante","Route barrée","Déviation obligatoire","Fin de priorité"],
+      a: 0,
+      exp: "👉 Explication : Indique un risque de chaussée glissante (pluie, verglas, huile)."
+    },
+    {
+      q: "Que signifie le panneau Triangle avec train sans barrière ?",
+      img: "danger/8.png",
+      choices: ["Passage à niveau avec barrière","Passage à niveau sans barrière","Gare","Interdiction aux trains"],
+      a: 1,
+      exp: "👉 Explication : Indique un passage à niveau dangereux sans protection mécanique."
+    },
+    {
+      q: "Que signifie le panneau Triangle avec avion ?",
+      img: "danger/9.png",
+      choices: ["Zone militaire","Aéroport à proximité","Zone militaire","Héliport"],
+      a: 1,
+      exp: "👉 Explication : Préviens d’un aéroport proche, possible bruit ou survol bas."
+    },
+    {
+      q: "Que signifie un panneau Triangle avec feu tricolore ?",
+      img: "danger/10.png",
+      choices: ["Intersection avec priorité","Présence de feux tricolores","Feu de détresse","Interdiction de circuler"],
+      a: 1,
+      exp: "👉 Explication : Indique qu’un carrefour est régulé par des feux de signalisation."
+    }
+  ];
+
+  let current = 0;
+  let score = 0;
+  let selected = null;
+  const qnum = document.getElementById('qnum');
+  const questionText = document.getElementById('question-text');
+  const choicesBox = document.getElementById('choices');
+  const imgEl = document.getElementById('question-image');
+  const explain = document.getElementById('explain');
+  const nextBtn = document.getElementById('nextBtn');
+  const skipBtn = document.getElementById('skipBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const scoreEl = document.getElementById('score');
+  const resultsBox = document.getElementById('resultsBox');
+  const review = document.getElementById('review');
+  const progressBar = document.getElementById('progressBar');
+  const timerEl = document.getElementById('timer');
+
+  // Per-question timer (optional)
+  const QUESTION_TIME = 15; // seconds
+  let timeLeft = QUESTION_TIME;
+  let timerInterval = null;
+
+  function startTimer(){
+    clearInterval(timerInterval);
+    timeLeft = QUESTION_TIME;
+    timerEl.textContent = `${timeLeft}s`;
+    timerInterval = setInterval(()=>{
+      timeLeft--;
+      timerEl.textContent = `${timeLeft}s`;
+      const pct = ((QUESTION_TIME - timeLeft)/QUESTION_TIME)*100;
+      progressBar.style.width = pct + '%';
+      if(timeLeft<=0){
+        clearInterval(timerInterval);
+        // auto-validate as skipped
+        lockChoices();
+        showCorrect();
+        nextBtn.textContent = (current < questions.length-1) ? 'Suivant' : 'Voir résultat';
+      }
+    },1000);
+  }
+
+  function renderQuestion(){
+    selected = null;
+    const q = questions[current];
+    qnum.textContent = current+1;
+    questionText.textContent = q.q;
+    imgEl.src = q.img;
+    explain.textContent = '';
+    choicesBox.innerHTML = '';
+    q.choices.forEach((c,i)=>{
+      const div = document.createElement('div');
+      div.className='choice';
+      div.tabIndex = 0;
+      div.innerHTML = `<strong>${String.fromCharCode(65+i)}.</strong> ${c}`;
+      div.addEventListener('click', ()=> selectChoice(i,div));
+      div.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') selectChoice(i,div); });
+      choicesBox.appendChild(div);
+    });
+    nextBtn.textContent = 'Valider / Suivant';
+    progressBar.style.width = '0%';
+    startTimer();
+  }
+
+  function selectChoice(i,el){
+    if(choicesBox.querySelector('.choice.correct') || choicesBox.querySelector('.choice.wrong')) return; // locked
+    selected = i;
+    // highlight selection
+    [...choicesBox.children].forEach(ch=>ch.style.opacity=1);
+    el.style.outline='2px solid rgba(255,255,255,0.06)';
+  }
+
+  function lockChoices(){
+    clearInterval(timerInterval);
+    [...choicesBox.children].forEach(ch=>ch.style.pointerEvents='none');
+  }
+
+  function showCorrect(){
+    lockChoices();
+    const q = questions[current];
+    [...choicesBox.children].forEach((ch,idx)=>{
+      if(idx===q.a) ch.classList.add('correct');
+      if(selected!==null && idx===selected && selected!==q.a) ch.classList.add('wrong');
+    });
+    explain.textContent = q.exp;
+  }
+
+  nextBtn.addEventListener('click', ()=>{
+    const q = questions[current];
+    // if already locked, go to next
+    if(choicesBox.querySelector('.choice.correct')){
+      current++;
+      if(current >= questions.length) return showResults();
+      renderQuestion();
+      return;
+    }
+    // validate
+    if(selected === null){
+      // treat as wrong / no answer
+      showCorrect();
+      nextBtn.textContent = (current < questions.length-1) ? 'Suivant' : 'Voir résultat';
+      return;
+    }
+    if(selected === q.a){ score++; scoreEl.textContent = score; }
+    showCorrect();
+    nextBtn.textContent = (current < questions.length-1) ? 'Suivant' : 'Voir résultat';
+  });
+
+  skipBtn.addEventListener('click', ()=>{
+    showCorrect();
+    nextBtn.textContent = (current < questions.length-1) ? 'Suivant' : 'Voir résultat';
+  });
+
+  resetBtn.addEventListener('click', ()=>{
+    if(!confirm('Réinitialiser le quiz ?')) return;
+    current=0;score=0;scoreEl.textContent=0;resultsBox.style.display='none';renderQuestion();
+  });
+
+  function showResults(){
+    clearInterval(timerInterval);
+    resultsBox.style.display='block';
+    const percent = Math.round((score/questions.length)*100);
+    const finalMsg = document.getElementById('final-msg');
+    finalMsg.textContent = `${percent}% — ${score}/${questions.length}`;
+    // review
+    review.innerHTML = '';
+    questions.forEach((q,i)=>{
+      const div = document.createElement('div');
+      div.style.padding='6px 0';
+      div.innerHTML = `<strong>Q${i+1}:</strong> ${q.q} — Réponse: <em>${q.choices[q.a]}</em><div style='color:var(--muted);font-size:13px'>${q.exp}</div>`;
+      review.appendChild(div);
+    });
+    // optionally offer to restart
+  }
+
+  // init
+  renderQuestion();
+  </script>
+  
+</body>
+</html>
