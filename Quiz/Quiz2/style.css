@@ -150,7 +150,7 @@
         }
     }
     .quiz-logo {
-        position: fixed;
+        position: relative;
         width: 100px;
         top: 10px;
         left: 10px;
@@ -159,3 +159,62 @@
         margin-block: 5px;
         border-radius: 100%;
     }
+     /* Responsive mobile : max 600px */
+@media (max-width:600px){
+
+  /* Logo centré et fixé */
+  .quiz-logo {
+    position: relative;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    border-radius: 50%;
+    z-index: 1000;
+  }
+
+  /* Réorganisation en colonne */
+  .question-area{
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Titre centré */
+  header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 90px; /* pour ne pas cacher le logo */
+  }
+
+  header h1{
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+
+  .meta {
+    font-size: 14px;
+  }
+
+  /* Image panneau + timer en haut */
+  .q-right {
+    order: 1;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .q-right .img-wrap{
+    width: 100%;
+    height: auto;
+    max-height: 180px;
+  }
+
+  /* Question + choix en dessous */
+  .q-left {
+    order: 2;
+  }
+
+  .choices {
+    margin-top: 12px;
+  }
+}

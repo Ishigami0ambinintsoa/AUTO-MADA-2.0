@@ -7,8 +7,9 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <img src="indication/logo_ispm.png" class="quiz-logo">
+  
   <div class="container">
+    <img src="indication/logo_ispm.png" class="quiz-logo">
     <header>
       <h1>📘 Quiz 4 : Panneaux d’Indication</h1>
       <div class="meta">Question <strong id="qnum">1</strong>/10</div>
@@ -26,7 +27,16 @@
             <button id="resetBtn" class="ghost">Réinitialiser</button>
             <button class="autre" onclick="window.location.href='../accueil.html'">Autre Quiz</button>
           </div>
+          <!-- Résultats déplacés ici -->
+          <div class="results" id="resultsBox">
+            <div class="summary">
+              <div>Score: <strong id="score">0</strong></div>
+              <div id="final-msg" style="color:var(--muted)"></div>
+            </div>
+            <div id="review" style="margin-top:10px;color:var(--muted);font-size:14px"></div>
+          </div>
         </div>
+        
 
         <aside class="q-right">
           <div class="img-wrap">
