@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Quiz Code de la Route — 10 questions</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <img src="obligation/logo_ispm.png" class="quiz-logo">
+  <div class="container">
+    <header>
+      <h1>📘 Quiz 3 : Panneaux d’Obligation 🔵</h1>
+      <div class="meta">Question: <strong id="qnum">1</strong>/10</div>
+    </header>
+
+    <section class="card" id="quiz">
+      <div class="question-area">
+        <div class="q-left">
+          <h2 id="question-text">Question text</h2>
+          <p id="explain" style="color:var(--muted);margin-top:6px"></p>
+          <div class="choices" id="choices"></div>
+          <div class="controls" style="margin-top:12px">
+            <button id="nextBtn">Valider / Suivant</button>
+            <button id="skipBtn" class="ghost">Passer</button>
+            <button id="resetBtn" class="ghost">Réinitialiser</button>
+            <button class="autre" onclick="window.location.href='../accueil.html'">Autre Quiz</button>
+          </div>
+        </div>
+
+        <aside class="q-right">
+          <div class="img-wrap">
+            <img id="question-image" src="" alt="" />
+          </div>
+        
+          <div style="width:100%">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <small style="color:var(--muted)">Temps par question:</small>
+              <strong id="timer">—</strong>
+            </div>
+            <div class="progress" aria-hidden="true" style="margin-top:8px"><i id="progressBar"></i></div>
+
+            <div class="results" id="resultsBox">
+              <div class="summary"><div>Score: <strong id="score">0</strong></div><div id="final-msg" style="color:var(--muted)"></div></div>
+              <div id="review" style="margin-top:10px;color:var(--muted);font-size:14px"></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </div>
+  <script>
+    // Questions array: text, choices, correct index (0-based), explanation, image
+  const questions = [
+    {
+      q: "Que signifie ce panneau Rond bleu avec flèche droite ?",
+      img: "obligation/1.jpg",
+      choices: ["Interdiction de tourner à gauche","Obligation de tourner à droite","Déviation obligatoire","Parking"],
+      a: 1,
+      exp: "👉 Explication : Les usagers doivent obligatoirement suivre la direction indiquée."
+    },
+    {
+      q: "Que signifie ce panneau Rond bleu avec flèche tout droit ?",
+      img: "obligation/2.png",
+      choices: ["Interdiction de tourner à droite","Rond bleu avec flèche tout droit","Route prioritaire","Route barrée"],
+      a: 1,
+      exp: "👉 Explication : Aucune autre direction n’est autorisée."
+    },
+    {
+      q: "Que signifie ce panneau Rond bleu avec piéton ?",
+      img: "obligation/3.jpg",
+      choices: ["Interdiction aux piétons","Voie obligatoire pour piétons","Passage clouté","Zone résidentielle"],
+      a: 1,
+      exp: "👉 Explication : Les piétons doivent circuler sur ce passage."
+    },
+    {
+      q: "Que signifie un panneau Rond bleu avec vélo ?",
+      img: "obligation/4.png",
+      choices: ["Interdiction aux vélos","Parking vélo","Piste cyclable obligatoire","Déviation obligatoire"],
+      a: 2,
+      exp: "👉 Explication : Les cyclistes doivent obligatoirement utiliser cette voie."
+    },
+    {
+      q: "Que signifie ce panneau Rond bleu avec chaîne ?",
+      img: "obligation/5.png",
+      choices: ["Pneus interdits","Route glissante","Chaînes à neige obligatoires","Fin d’obligation"],
+      a: 2,
+      exp: "👉 Explication : En hiver, seuls les véhicules équipés de chaînes peuvent circuler."
+    },
+    {
+      q: "Que signifie ce panneau Rond bleu avec camion ?",
+      img: "obligation/6.png",
+      choices: ["Interdiction aux camions","Voie obligatoire pour poids lourds","Parking poids lourds","Route barrée"],
+      a: 1,
+      exp: "👉 Explication : Les camions doivent obligatoirement passer par cette voie."
+    },
+    {
+      q: "Que signifie le panneau Rond bleu avec cercle blanc au centre ?",
+      img: "obligation/7.png",
+      choices: ["Obligation de contournement","Stationnement interdit","Déviation obligatoire","Fin de priorité"],
+      a: 0,
+      exp: "👉 Explication : Les véhicules doivent contourner l’obstacle dans le sens indiqué."
+    },
+    {
+      q: "Que signifie le panneau Rond bleu avec casque ?",
+      img: "obligation/8.png",
+      choices: ["Casque interdit","Casque obligatoire","Chaussures obligatoires","Route glissante"],
+      a: 1,
+      exp: "👉 Explication : Les motocyclistes doivent porter un casque."
+    },
+    {
+      q: "Que signifie le panneau Rond bleu avec bus ?",
+      img: "obligation/9.png",
+      choices: ["Interdiction aux bus","Voie réservée aux bus","Parking bus","Arrêt obligatoire"],
+      a: 1,
+      exp: "👉 Explication : Seuls les bus peuvent circuler sur cette voie."
+    },
+    {
+      q: "Que signifie un panneau Rond bleu avec flèche gauche ?",
+      img: "obligation/10.jpg",
+      choices: ["Interdiction de tourner à gauche","Obligation de tourner à gauche","Route barrée","Déviation"],
+      a: 1,
+      exp: "👉 Explication : Les conducteurs doivent tourner obligatoirement à gauche."
+    }
+  ];
+
+  let current = 0;
+  let score = 0;
+  let selected = null;
+  const qnum = document.getElementById('qnum');
+  const questionText = document.getElementById('question-text');
+  const choicesBox = document.getElementById('choices');
+  const imgEl = document.getElementById('question-image');
+  const explain = document.getElementById('explain');
+  const nextBtn = document.getElementById('nextBtn');
+  const skipBtn = document.getElementById('skipBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const scoreEl = document.getElementById('score');
+  const resultsBox = document.getElementById('resultsBox');
+  const review = document.getElementById('review');
+  const progressBar = document.getElementById('progressBar');
+  const timerEl = document.getElementById('timer');
+
+  // Per-question timer (optional)
+  const QUESTION_TIME = 15; // seconds
+  let timeLeft = QUESTION_TIME;
+  let timerInterval = null;
+
+  function startTimer(){
+    clearInterval(timerInterval);
+    timeLeft = QUESTION_TIME;
+    timerEl.textContent = `${timeLeft}s`;
+    timerInterval = setInterval(()=>{
+      timeLeft--;
+      timerEl.textContent = `${timeLeft}s`;
+      const pct = ((QUESTION_TIME - timeLeft)/QUESTION_TIME)*100;
+      progressBar.style.width = pct + '%';
+      if(timeLeft<=0){
+        clearInterval(timerInterval);
+        // auto-validate as skipped
+        lockChoices();
+        showCorrect();
+        nextBtn.textContent = (current < questions.length-1) ? 'Suivant' : 'Voir résultat';
+      }
+    },1000);
+  }
+
+  function renderQuestion(){
+    selected = null;
+    const q = questions[current];
+    qnum.textContent = current+1;
+    questionText.textContent = q.q;
+    imgEl.src = q.img;
+    explain.textContent = '';
+    choicesBox.innerHTML = '';
+    q.choices.forEach((c,i)=>{
+      const div = document.createElement('div');
+      div.className='choice';
+      div.tabIndex = 0;
+      div.innerHTML = `<strong>${String.fromCharCode(65+i)}.</strong> ${c}`;
+      div.addEventListener('click', ()=> selectChoice(i,div));
+      div.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') selectChoice(i,div); });
+      choicesBox.appendChild(div);
+    });
+    nextBtn.textContent = 'Valider / Suivant';
+    progressBar.style.width = '0%';
+    startTimer();
+  }
+
+  function selectChoice(i,el){
+    if(choicesBox.querySelector('.choice.correct') || choicesBox.querySelector('.choice.wrong')) return; // locked
+    selected = i;
+    // highlight selection
+    [...choicesBox.children].forEach(ch=>ch.style.opacity=1);
+    el.style.outline='2px solid rgba(255,255,255,0.06)';
+  }
+
+  function lockChoices(){
+    clearInterval(timerInterval);
+    [...choicesBox.children].forEach(ch=>ch.style.pointerEvents='none');
+  }
+
+  function showCorrect(){
+    lockChoices();
+    const q = questions[current];
+    [...choicesBox.children].forEach((ch,idx)=>{
+      if(idx===q.a) ch.classList.add('correct');
+      if(selected!==null && idx===selected && selected!==q.a) ch.classList.add('wrong');
+    });
+    explain.textContent = q.exp;
+  }
+
+  nextBtn.addEventListener('click', ()=>{
+    const q = questions[current];
+    // if already locked, go to next
+    if(choicesBox.querySelector('.choice.correct')){
+      current++;
+      if(current >= questions.length) return showResults();
+      renderQuestion();
+      return;
+    }
+    // validate
+    if(selected === null){
+      // treat as wrong / no answer
+      showCorrect();
+      nextBtn.textContent = (current < questions.length-1) ? 'Suivant' : 'Voir résultat';
+      return;
+    }
+    if(selected === q.a){ score++; scoreEl.textContent = score; }
+    showCorrect();
+    nextBtn.textContent = (current < questions.length-1) ? 'Suivant' : 'Voir résultat';
+  });
+
+  skipBtn.addEventListener('click', ()=>{
+    showCorrect();
+    nextBtn.textContent = (current < questions.length-1) ? 'Suivant' : 'Voir résultat';
+  });
+
+  resetBtn.addEventListener('click', ()=>{
+    if(!confirm('Réinitialiser le quiz ?')) return;
+    current=0;score=0;scoreEl.textContent=0;resultsBox.style.display='none';renderQuestion();
+  });
+
+  function showResults(){
+    clearInterval(timerInterval);
+    resultsBox.style.display='block';
+    const percent = Math.round((score/questions.length)*100);
+    const finalMsg = document.getElementById('final-msg');
+    finalMsg.textContent = `${percent}% — ${score}/${questions.length}`;
+    // review
+    review.innerHTML = '';
+    questions.forEach((q,i)=>{
+      const div = document.createElement('div');
+      div.style.padding='6px 0';
+      div.innerHTML = `<strong>Q${i+1}:</strong> ${q.q} — Réponse: <em>${q.choices[q.a]}</em><div style='color:var(--muted);font-size:13px'>${q.exp}</div>`;
+      review.appendChild(div);
+    });
+    // optionally offer to restart
+  }
+
+  // init
+  renderQuestion();
+  </script>
+  
+</body>
+</html>
